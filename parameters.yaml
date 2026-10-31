@@ -1,0 +1,6 @@
+temperature_monitor:
+  ros__parameters:
+    high: 80.0
+    low: 75.0
+    alpha: 0.2
+    stale_timeout: 1.0
