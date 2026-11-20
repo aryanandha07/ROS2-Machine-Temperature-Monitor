@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  temperature_monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ros2_machine_monitor
+    network_mode: "host"
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./evidence:/ros2_ws/evidence
+    command: ros2 launch machine_temperature_monitor machine_monitor.launch.py

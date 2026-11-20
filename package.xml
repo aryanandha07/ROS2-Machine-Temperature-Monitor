@@ -2,8 +2,8 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>machine_temperature_monitor</name>
-  <version>1.0.0</version>
-  <description>ROS 2 machine temperature monitoring with alarm, hysteresis, and stale sensor detection.</description>
+  <version>1.1.0</version>
+  <description>ROS 2 machine temperature monitoring with alarm, hysteresis, diagnostics, and digital twin simulation.</description>
   <maintainer email="aryanandha633@gmail.com">Aryanandha</maintainer>
   <license>Apache-2.0</license>
 
@@ -13,6 +13,10 @@
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
   <depend>std_srvs</depend>
+  <depend>diagnostic_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>ament_index_python</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

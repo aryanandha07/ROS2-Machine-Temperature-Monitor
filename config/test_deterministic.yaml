@@ -1,0 +1,13 @@
+temperature_monitor:
+  ros__parameters:
+    high: 80.0
+    low: 75.0
+    alpha: 1.0
+    stale_timeout: 1.0
+
+temperature_sensor:
+  ros__parameters:
+    mode: "deterministic"
+    initial_temperature: 74.0
+    publish_rate: 10.0
+    noise_std: 0.0

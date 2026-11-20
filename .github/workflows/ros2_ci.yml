@@ -1,0 +1,46 @@
+name: ROS 2 CI & Quality Checks
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-22.04
+    container:
+      image: osrf/ros:humble-desktop
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          apt-get update && apt-get install -y \
+            python3-pip \
+            python3-pytest \
+            python3-matplotlib \
+            ros-humble-diagnostic-msgs \
+            ros-humble-visualization-msgs
+          pip3 install flake8 pep257
+
+      - name: Set up ROS 2 workspace
+        run: |
+          mkdir -p /ros2_ws/src/machine_temperature_monitor
+          cp -r . /ros2_ws/src/machine_temperature_monitor/
+
+      - name: Build package
+        run: |
+          . /opt/ros/humble/setup.sh
+          cd /ros2_ws
+          colcon build --packages-select machine_temperature_monitor
+
+      - name: Run unit & acceptance tests
+        run: |
+          . /opt/ros/humble/setup.sh
+          . /ros2_ws/install/setup.sh
+          cd /ros2_ws
+          colcon test --packages-select machine_temperature_monitor --event-handlers console_direct+
+          colcon test-result --verbose
