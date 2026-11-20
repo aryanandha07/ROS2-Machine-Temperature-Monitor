@@ -206,15 +206,19 @@ colcon test-result --verbose
 
 ---
 
-## 8. Team Contribution Breakdown
+## 8. Academic Context & Team Contribution Breakdown
+
+**Institution:** Indian Institute of Information Technology, Design and Manufacturing (IIITDM), Jabalpur  
+**Program:** B.Tech Smart Manufacturing  
+**Faculty Evaluator:** Prof. Sunil Aggarwal  
 
 In accordance with the 3-role project specification:
 
-| Role | Primary Owner | Subsystems & Files | Responsibilities |
-|---|---|---|---|
-| **Role A: Sensor & Test Sequences** | **Aryanandha** | `temperature_sensor.py`, `test_sequence.py` | Sensor publishing at 10 Hz, physics model, fault-injection services, automated test-runner script. |
-| **Role B: Filtering, Alarm & Reset** | **Team Member 2** | `temperature_monitor.py` | EMA digital filter, hysteresis state machine, stale-timeout watchdog, `/machine/reset` service, and `/diagnostics`. |
-| **Role C: Launch, Validation & Evidence** | **Team Member 3** | `machine_monitor.launch.py`, `evidence_logger.py`, `test/` | Launch files, parameter YAMLs, CSV evidence generation, publication-grade matplotlib plots, and CI pipeline. |
+| Role | Primary Owner | Roll Number | Subsystems & Files | Responsibilities |
+|---|---|---|---|---|
+| **Role A: Sensor & Test Sequences** | **Aryanandha** | **24BSM013** | `temperature_sensor.py`, `test_sequence.py` | Sensor publishing at 10 Hz, physics model, dynamic fault-injection services, automated test-runner script. |
+| **Role B: Filtering, Alarm & Reset** | **Spoorthy** | **24BSM002** | `temperature_monitor.py` | EMA digital filter, dual-threshold hysteresis state machine, stale-timeout watchdog, `/machine/reset` service, and `/diagnostics`. |
+| **Role C: Launch, Validation & Evidence** | **Devanshu Verma** | **24BSM019** | `machine_monitor.launch.py`, `evidence_logger.py`, `test/`, `Dockerfile` | Launch orchestration, parameter YAMLs, CSV evidence generation, publication-grade matplotlib plots, and CI/CD pipeline. |
 
 ---
 
