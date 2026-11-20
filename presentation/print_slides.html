@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ROS 2 Machine Temperature Monitor PDF</title>
+    <style>
+        @page {
+            size: 16in 9in;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        .slide {
+            width: 16in;
+            height: 9in;
+            page-break-after: always;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+            padding: 0.8in 1.1in;
+            position: relative;
+            box-sizing: border-box;
+            background: #f8fafc;
+        }
+
+        /* Slide 1 Cover */
+        .title-slide {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+            color: white;
+            justify-content: space-between;
+        }
+
+        .badge {
+            background: rgba(249, 115, 22, 0.25);
+            color: #fb923c;
+            border: 1px solid rgba(249, 115, 22, 0.5);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .title-slide h1 {
+            font-size: 46px;
+            font-weight: 900;
+            line-height: 1.2;
+            color: #f8fafc;
+            margin-bottom: 12px;
+        }
+
+        .title-slide h2 {
+            font-size: 24px;
+            font-weight: 400;
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 40px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            padding-top: 28px;
+        }
+
+        .team-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 24px 30px;
+        }
+
+        .team-member {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 22px;
+        }
+        .team-member:last-child { border-bottom: none; }
+        .member-name { font-weight: 700; color: #f1f5f9; }
+        .member-roll { color: #38bdf8; font-family: monospace; font-weight: bold; }
+
+        .supervisor-box {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 10px;
+            padding: 24px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .supervisor-label { font-size: 16px; text-transform: uppercase; letter-spacing: 1.5px; color: #60a5fa; font-weight: 700; }
+        .supervisor-name { font-size: 34px; font-weight: 800; color: #ffffff; margin-top: 6px; }
+        .inst-tag { font-size: 19px; color: #93c5fd; margin-top: 10px; font-weight: 600; }
+
+        /* Slide Headers */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #cbd5e1;
+            padding-bottom: 16px;
+            margin-bottom: 30px;
+        }
+        .slide-number { font-size: 34px; font-weight: 900; color: #94a3b8; font-family: monospace; }
+        .slide-title { font-size: 32px; font-weight: 800; color: #0f172a; }
+        .slide-subtitle { font-size: 18px; color: #64748b; margin-top: 5px; }
+
+        /* Grids and Cards */
+        .col-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            flex: 1;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 26px 30px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+        }
+
+        .card-header {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e3a8a;
+            margin-bottom: 16px;
+        }
+
+        .card-body {
+            font-size: 17px;
+            line-height: 1.6;
+            color: #334155;
+            flex: 1;
+        }
+
+        ul { padding-left: 24px; margin-top: 8px; }
+        li { margin-bottom: 10px; }
+        code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: Consolas, monospace; font-size: 16px; color: #0f172a; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 10px; }
+        th { background: #f1f5f9; padding: 12px 16px; text-align: left; border-bottom: 2px solid #cbd5e1; font-weight: 700; }
+        td { padding: 10px 16px; border-bottom: 1px solid #cbd5e1; color: #334155; }
+        .status-pass { background: #dcfce7; color: #15803d; font-weight: 700; padding: 3px 10px; border-radius: 4px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1 -->
+    <div class="slide title-slide">
+        <div>
+            <div class="badge">ROS 2 HUMBLE • SMART MANUFACTURING CYBER-PHYSICAL SYSTEM</div>
+            <h1>ROS 2 BASED MACHINE TEMPERATURE<br>MONITORING AND ALARM SYSTEM</h1>
+            <h2>A Python-Based Industrial Temperature Monitoring & Autonomous Fault Detection Prototype</h2>
+        </div>
+
+        <div class="team-grid">
+            <div class="team-box">
+                <div style="font-size: 14px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1.5px; margin-bottom: 14px; font-weight: 700;">
+                    Presented by:
+                </div>
+                <div class="team-member">
+                    <span class="member-name">Aryanandha</span>
+                    <span class="member-roll">24BSM013</span>
+                </div>
+                <div class="team-member">
+                    <span class="member-name">Spoorthy</span>
+                    <span class="member-roll">24BSM002</span>
+                </div>
+                <div class="team-member">
+                    <span class="member-name">Devanshu Verma</span>
+                    <span class="member-roll">24BSM019</span>
+                </div>
+            </div>
+
+            <div class="supervisor-box">
+                <div class="supervisor-label">Presented to:</div>
+                <div class="supervisor-name">Prof. Sunil Aggarwal</div>
+                <div class="inst-tag">· B.Tech Smart Manufacturing ·<br>IIITDM Jabalpur</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">OVERHEATING NEEDS AN EARLY, STABLE RESPONSE</div>
+                <div class="slide-subtitle">&gt; detect before damage.</div>
+            </div>
+            <div class="slide-number">02</div>
+        </div>
+        <div class="col-2">
+            <div class="card">
+                <div class="card-header" style="color: #dc2626;">PROBLEM</div>
+                <div class="card-body">
+                    <p>Abnormal machine temperature can cause equipment damage, production interruptions, and safety concerns.</p>
+                    <div style="margin-top: 24px; font-weight: 800; color: #1e3a8a; font-size: 20px;">SCOPE</div>
+                    <p style="margin-top: 8px;">Software prototype with simulated sensor data, not a physical industrial installation.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" style="color: #1e3a8a;">MONITOR · ALARM · SAFETY</div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>MONITOR:</strong> Monitor simulated temperature data through a ROS 2 node.</li>
+                        <li><strong>ALARM:</strong> Activate an alarm at a high threshold and clear it safely below a low threshold.</li>
+                        <li><strong>SAFETY:</strong> Detect stale data (&gt;1.0s) and provide a reset service.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">TWO ROS 2 NODES TURN READINGS INTO MACHINE STATUS</div>
+                <div class="slide-subtitle">A topic carries readings forward; a reset service returns a controlled request.</div>
+            </div>
+            <div class="slide-number">03</div>
+        </div>
+        <div class="col-2">
+            <div class="card">
+                <div class="card-header">NODE 01: Simulated Temperature Sensor Node</div>
+                <div class="card-body">
+                    <p><strong>Primary Function:</strong> Publishes simulated readings at 10 Hz.</p>
+                    <ul>
+                        <li><strong>Topic:</strong> <code>/machine/temperature</code></li>
+                        <li><strong>Message Type:</strong> <code>sensor_msgs/msg/Temperature</code></li>
+                    </ul>
+                    <p style="margin-top: 20px; font-style: italic; color: #64748b;">
+                        Topic path: Simulated Temperature Sensor Node → ROS 2 topic: /machine/temperature → Temperature Monitoring Node
+                    </p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">NODE 02: Temperature Monitoring Node</div>
+                <div class="card-body">
+                    <p><strong>Functions:</strong> EMA filtering · threshold comparison · timeout detection.</p>
+                    <ul>
+                        <li><strong>Parameters:</strong> high 80°C · low 75°C · EMA α 0.2 default · stale timeout 1 second</li>
+                        <li><strong>Outputs:</strong> <code>/machine/alarm</code> (Bool) · <code>/machine/status</code> (String)</li>
+                        <li><strong>Reset Service:</strong> <code>/machine/reset</code> (Trigger)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">HYSTERESIS PREVENTS REPEATED ALARM SWITCHING</div>
+                <div class="slide-subtitle">1 Receive (Temperature reading) → 2 Filter (Apply EMA) → 3 Compare (Thresholds)</div>
+            </div>
+            <div class="slide-number">04</div>
+        </div>
+        <div class="col-2">
+            <div class="card">
+                <div class="card-header">THRESHOLD BEHAVIOUR</div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>80°C HIGH:</strong> At or above 80°C: activate the alarm.</li>
+                        <li><strong>HYSTERESIS ZONE:</strong> Between 75°C and 80°C: hold the existing state.</li>
+                        <li><strong>75°C LOW:</strong> Below 75°C: clear the alarm.</li>
+                        <li><strong>SAFETY:</strong> Reject reset when temperature is unsafe or data is stale.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">FILTER EQUATION</div>
+                <div class="card-body">
+                    <div style="background: #f1f5f9; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 16px; font-weight: bold; color: #1e3a8a; text-align: center; margin-bottom: 16px;">
+                        FilteredTemperature = α × CurrentReading +<br>(1 − α) × PreviousFilteredTemperature
+                    </div>
+                    <p><strong>α balances the latest reading against previous filtered readings:</strong></p>
+                    <ul>
+                        <li><strong>α = 0.2:</strong> Low-pass filtering attenuating vibration chatter.</li>
+                        <li><strong>α = 1.0:</strong> Deterministic evaluation for testing.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">THE PROTOTYPE IS ORGANIZED FOR REPEATABLE TESTING</div>
+                <div class="slide-subtitle">ROS 2 Humble • Python/rclpy • Ubuntu 22.04 using WSL</div>
+            </div>
+            <div class="slide-number">05</div>
+        </div>
+        <div class="col-2">
+            <div class="card">
+                <div class="card-header">ARCHITECTURE &amp; INTERFACES</div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>PLATFORM:</strong> ROS 2 Humble, Python/rclpy, Ubuntu 22.04 using WSL</li>
+                        <li><strong>INTERFACES:</strong> <code>sensor_msgs</code>, <code>std_msgs</code>, and <code>std_srvs</code></li>
+                        <li><strong>CONFIGURATION:</strong> YAML parameters and ROS 2 launch file</li>
+                        <li><strong>TEST SCRIPT:</strong> Publishes temperatures and calls reset service</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">VERIFIED TEST RESULTS</div>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr><th>TEST CONDITION</th><th>EXPECTED BEHAVIOUR</th><th>STATUS</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>74°C</td><td>Normal status; alarm inactive</td><td><span class="status-pass">PASS</span></td></tr>
+                            <tr><td>80°C</td><td>Alarm activates</td><td><span class="status-pass">PASS</span></td></tr>
+                            <tr><td>77°C after alarm</td><td>Alarm remains active</td><td><span class="status-pass">PASS</span></td></tr>
+                            <tr><td>Below 75°C</td><td>Alarm can clear</td><td><span class="status-pass">PASS</span></td></tr>
+                            <tr><td>Stale data</td><td>Missing updates detected (&gt;1s)</td><td><span class="status-pass">PASS</span></td></tr>
+                            <tr><td>Reset request</td><td>Accepted or rejected by safety</td><td><span class="status-pass">PASS</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">A SOFTWARE FOUNDATION READY FOR PHYSICAL SENSING</div>
+                <div class="slide-subtitle">Delivered Full Prototype and Proposed Future Enhancements</div>
+            </div>
+            <div class="slide-number">06</div>
+        </div>
+        <div class="col-2">
+            <div class="card">
+                <div class="card-header">CORE FOUNDATION ACCOMPLISHED</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Implemented separate sensor and monitoring nodes with ROS 2 communication.</li>
+                        <li>Added EMA filtering, threshold alarm logic, hysteresis, stale-data detection, and reset handling.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" style="color: #059669;">FUTURE SCOPES DELIVERED</div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>Live Dashboard:</strong> Interactive Tkinter GUI dashboard (<code>machine_dashboard.py</code>) with live gauges and fault triggers.</li>
+                        <li><strong>Historical Telemetry:</strong> Continuous 10 Hz CSV logging with automated 4-panel Matplotlib verification plots.</li>
+                        <li><strong>3D Digital Twin:</strong> RViz2 3D marker with dynamic thermal color heatmapping.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
